@@ -1,3 +1,5 @@
+package app;
+
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -15,6 +17,18 @@ public class Session {
         this.employee = employee;
         this.cashDesk = cashDesk;
         this.startTimestamp = LocalDateTime.now();
+    }
+
+    public void addTransaction(Transaction transaction){
+        this.transactions.add(transaction);
+    }
+
+    public void closeSession(){
+        //todo: Save session to daily closure
+        this.startTimestamp = null;
+        this.transactions = new ArrayList<Transaction>();
+        this.employee = null;
+        this.cashDesk = null;
     }
 
 

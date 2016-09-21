@@ -1,3 +1,5 @@
+package app;
+
 import java.util.ArrayList;
 
 /**
@@ -6,13 +8,22 @@ import java.util.ArrayList;
 public abstract class Transaction {
     protected ArrayList<Product> productsInTransaction;
     protected Card assignedCard;
+    protected boolean inProgress;
+    protected double totalAmount;
 
     public Transaction(){
         this.productsInTransaction = new ArrayList<Product>();
+        this.inProgress = true;
+    }
+
+    public void finishTransaction(){
+        this.inProgress = false;
     }
 
     public void addProduct(Product product){
-        this.productsInTransaction.add(product);
+        if(inProgress){
+            this.productsInTransaction.add(product);
+        }
     }
 
     public void setAssignedCard(Card card){

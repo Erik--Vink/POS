@@ -1,3 +1,5 @@
+package app;
+
 /**
  * Created by Erik on 19-9-2016.
  */
@@ -14,5 +16,14 @@ public class CashDesk {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public static boolean matches(int number){
+        if(number == 1){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

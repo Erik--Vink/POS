@@ -1,4 +1,7 @@
+package app;
+
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
@@ -8,9 +11,15 @@ import java.util.ArrayList;
 public abstract class Product {
     protected ArrayList<Product> productList;
     protected Product parent;
-    @Getter protected String code;
-    @Getter protected String name;
-    @Getter protected double price;
+    @Setter @Getter protected String code;
+    @Setter @Getter protected String name;
+    @Setter @Getter protected double price;
+
+    public Product(String code, String name, double price){
+        this.code = code;
+        this.name = name;
+        this.price = price;
+    }
 
     public abstract int countProducts();
 

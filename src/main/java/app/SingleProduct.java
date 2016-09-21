@@ -1,12 +1,12 @@
+package app;
+
 /**
  * Created by Erik on 19-9-2016.
  */
 public class SingleProduct extends Product{
 
     public SingleProduct(String code, String name, double price){
-        this.code = code;
-        this.name = name;
-        this.price = price;
+        super(code, name, price);
     }
 
     public int countProducts() {

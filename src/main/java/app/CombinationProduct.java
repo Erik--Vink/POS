@@ -1,11 +1,12 @@
+package app;
+
 import java.util.ArrayList;
 
 public class CombinationProduct extends Product{
 
-    public CombinationProduct(String name, double price){
+    public CombinationProduct(String code, String name, double price){
+        super(code, name, price);
         this.productList = new ArrayList<Product>();
-        this.setName(name);
-        this.setPrice(price);
     }
 
     public int countProducts() {
