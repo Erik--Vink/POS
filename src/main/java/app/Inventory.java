@@ -1,32 +1,35 @@
 package app;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.function.Predicate;
 
 public class Inventory {
 
     private static Inventory inventory;
-    private static HashMap<String, Product> products;
+    private static ArrayList<Product> products;
 
     private Inventory() {}
 
     public static Inventory getInventory(){
         if(inventory == null){
             inventory = new Inventory();
-            products = new HashMap<String, Product>();
+            products = new ArrayList<Product>();
         }
         return inventory;
     }
 
     public void addProduct(Product product){
-        products.put(product.getCode(), product);
+        products.add(product);
     }
 
-    public HashMap<String, Product> getAllProducts(){
+    public ArrayList<Product> getAllProducts(){
         //Todo fill with dummy products
         return products;
     }
 
-    public Product getProduct(String code){
-        return products.get(code);
+    public Product getProduct(final String code){
+        Predicate<Product> predicate = p-> p.getCode().equals(code);
+        Product  product = products.stream().filter(predicate).findFirst().get();
+        return product;
     }
 }

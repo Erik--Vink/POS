@@ -1,11 +1,15 @@
 package app;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 
 /**
  * Created by Erik on 19-9-2016.
  */
+@Data
 public abstract class Transaction {
+    protected int id;
     protected ArrayList<Product> productsInTransaction;
     protected Card assignedCard;
     protected boolean inProgress;

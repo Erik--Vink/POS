@@ -1,6 +1,8 @@
 package app;
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -8,12 +10,15 @@ import java.util.ArrayList;
 /**
  * Created by Erik on 19-9-2016.
  */
+@NoArgsConstructor
+@Data
 public abstract class Product {
+    protected int id;
     protected ArrayList<Product> productList;
     protected Product parent;
-    @Setter @Getter protected String code;
-    @Setter @Getter protected String name;
-    @Setter @Getter protected double price;
+    protected String code;
+    protected String name;
+    protected double price;
 
     public Product(String code, String name, double price){
         this.code = code;
@@ -22,10 +27,6 @@ public abstract class Product {
     }
 
     public abstract int countProducts();
-
     public abstract boolean add(Product productsToAdd);
     public abstract boolean remove(Product productToRemove);
-
-    public void setParent(Product parentIn) {this.parent = parentIn; }
-    public Product getParent() {return this.parent;}
 }

@@ -1,8 +1,11 @@
 package app;
 
+import lombok.NoArgsConstructor;
+
 /**
  * Created by Erik on 19-9-2016.
  */
+@NoArgsConstructor
 public class Employee extends User {
     public Employee(String code) {
         super(code);

@@ -1,12 +1,15 @@
 package app;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+@NoArgsConstructor
 @Data
 public class Session {
+    private int id;
     private LocalDateTime startTimestamp;
     private ArrayList<Transaction> transactions;
     private Employee employee;
