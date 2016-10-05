@@ -1,7 +1,9 @@
-package data;
+package data.jdbc;
 
 import app.Product;
 import app.SingleProduct;
+import data.DatabaseConnection;
+import data.ProductRepository;
 
 import java.sql.*;
 import java.sql.Connection;

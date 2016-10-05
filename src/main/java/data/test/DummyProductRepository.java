@@ -1,9 +1,8 @@
-package data;
+package data.test;
 
-import app.Employee;
-import app.Inventory;
 import app.Product;
 import app.SingleProduct;
+import data.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.function.Predicate;

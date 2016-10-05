@@ -1,17 +1,13 @@
 package service;
 
-import app.Inventory;
 import app.Product;
 import app.SingleProduct;
 import data.DatabaseConnection;
-import data.DummyProductRepository;
-import data.JDBCProductRepository;
+import data.jdbc.JDBCProductRepository;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Map;
 
 @Path("/products")
 public class ProductResource {

@@ -1,6 +1,10 @@
-package data;
+package data.test;
 
 import app.Session;
+import data.CashDeskRepository;
+import data.EmployeeRepository;
+import data.SessionRepository;
+
 import java.util.ArrayList;
 import java.util.function.Predicate;
 

@@ -1,7 +1,7 @@
 package service;
 
 import app.Transaction;
-import data.DummyTransactionRepository;
+import data.test.DummyTransactionRepository;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;

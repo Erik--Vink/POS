@@ -1,8 +1,11 @@
-package data;
+package data.test;
 
 import app.Product;
 import app.Transaction;
 import app.TransactionFactory;
+import data.ProductRepository;
+import data.SessionRepository;
+import data.TransactionRepository;
 
 import java.util.ArrayList;
 import java.util.function.Predicate;
