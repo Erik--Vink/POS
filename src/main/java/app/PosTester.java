@@ -1,16 +1,7 @@
 package app;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.sql.*;
 
 /**
  * Created by Erik on 20-9-2016.
@@ -27,20 +18,43 @@ public class PosTester {
 
         InputReader reader = new InputReader();
 
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-
-        HttpPost httpPost = new HttpPost("http://localhost:8080/api/products");
         try {
-            httpPost.setEntity(new StringEntity(mapper.writeValueAsString(new SingleProduct("1", "kip", 99))));
-            httpclient.execute(httpPost);
-            httpclient.close();
-        } catch (UnsupportedEncodingException e) {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection connect = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521:xe_erik","erik","oracle");
+
+            Statement statement = connect.createStatement();
+
+            // select statement using executeQuery
+            ResultSet resultSet = statement.executeQuery( "select * from PRODUCT" );
+
+            while( resultSet.next() )
+            {
+                // access via name
+                String name = resultSet.getString( "NAME" );
+
+                System.out.println( "Name: " + name );
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        // CloseableHttpClient httpclient = HttpClients.createDefault();
+
+//        HttpPost httpPost = new HttpPost("http://localhost:8080/api/products");
+//        try {
+//            httpPost.setEntity(new StringEntity(mapper.writeValueAsString(new SingleProduct("1", "kip", 99))));
+//            httpclient.execute(httpPost);
+//            httpclient.close();
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        } catch (ClientProtocolException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         while(true){
             System.out.println("Enter an employee code to log in.");

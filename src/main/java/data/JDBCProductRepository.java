@@ -23,14 +23,15 @@ public class JDBCProductRepository implements ProductRepository {
     private void setConnection() {
         try {
 
-
-
-            this.connection = DriverManager.getConnection( "jdbc:oracle:thin:@localhost:1521:XE", "erik", "oracle");
+            Class.forName("oracle.jdbc.OracleDriver");
+            this.connection = DriverManager.getConnection( "jdbc:oracle:thin:@//localhost:1521/XE", "erik", "oracle");
 
             DatabaseMetaData meta = connection.getMetaData();
 
             System.out.println(meta.getDriverVersion());
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
