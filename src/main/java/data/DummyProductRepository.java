@@ -47,19 +47,19 @@ public class DummyProductRepository implements ProductRepository {
     }
 
     @Override
-    public Product create(String code, String name, double price) {
+    public int create(String code, String name, double price) {
         idCounter++;
         Product product = new SingleProduct(code, name, price);
         product.setId(idCounter);
         products.add(product);
-        return product;
+        return product.getId();
     }
 
     @Override
-    public Product create(Product product) {
+    public int create(Product product) {
         idCounter++;
         product.setId(idCounter);
         products.add(product);
-        return product;
+        return product.getId();
     }
 }

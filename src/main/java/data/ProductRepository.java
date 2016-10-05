@@ -12,6 +12,6 @@ public interface ProductRepository {
     ArrayList<Product> getAll() throws SQLException;
     Product getById(int id);
     Product getByCode(String code);
-    Product create(String code, String name, double price);
-    Product create(Product product);
+    int create(String code, String name, double price);
+    int create(Product product);
 }

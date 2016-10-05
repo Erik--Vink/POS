@@ -4,6 +4,7 @@ import app.Product;
 import app.SingleProduct;
 
 import java.sql.*;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
@@ -13,50 +14,24 @@ import java.util.function.Predicate;
 public class JDBCProductRepository implements ProductRepository {
 
     private Connection connection;
-    private int idCounter;
-    private ArrayList<Product> products;
 
-    public JDBCProductRepository(){
-        this.setConnection();
-    }
-
-    private void setConnection() {
-        try {
-
-            Class.forName("oracle.jdbc.OracleDriver");
-            this.connection = DriverManager.getConnection( "jdbc:oracle:thin:@//localhost:1521/XE", "erik", "oracle");
-
-            DatabaseMetaData meta = connection.getMetaData();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    public JDBCProductRepository(DatabaseConnection databaseConnection){
+        this.connection = databaseConnection.getConnection();
     }
 
     @Override
     public ArrayList<Product> getAll() {
         try {
-            Statement statement = this.connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            String query = "SELECT * FROM Products";
-            ResultSet resultSet = statement.executeQuery(query);
-//            connection.close();
-
+            Statement statement = this.connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Products");
             ArrayList<Product> products = new ArrayList<>();
-            while( resultSet.next()){
-                SingleProduct product = new SingleProduct();
-                product.setCode(resultSet.getString("CODE"));
-                product.setName(resultSet.getString("NAME"));
-                //            product.setParent(resultSet.getString("PARENT"));
-                product.setPrice((double) resultSet.getFloat("PRICE"));
-                products.add(product);
+
+            while (resultSet.next()) {
+                products.add(resultSetToProduct(resultSet));
             }
-
             resultSet.close();
+            this.connection.close();
             return products;
-
-//            return resultSetToProducts(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -65,45 +40,81 @@ public class JDBCProductRepository implements ProductRepository {
 
     @Override
     public Product getById(int id) {
-        Predicate<Product> predicate = p-> p.getId() == id;
-        return products.stream().filter(predicate).findFirst().get();
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement("SELECT * FROM Products where ID = ?");
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Product product = null;
+            while(resultSet.next()){
+                product = resultSetToProduct(resultSet);
+            }
+            resultSet.close();
+            this.connection.close();
+            return product;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public Product getByCode(String code) {
-        Predicate<Product> predicate = p-> p.getCode().equals(code);
-        return products.stream().filter(predicate).findFirst().get();
-    }
-
-    @Override
-    public Product create(String code, String name, double price) {
-        idCounter++;
-        Product product = new SingleProduct(code, name, price);
-        product.setId(idCounter);
-        products.add(product);
-        return product;
-    }
-
-    @Override
-    public Product create(Product product) {
-        idCounter++;
-        product.setId(idCounter);
-        products.add(product);
-        return product;
-    }
-
-    private ArrayList<Product> resultSetToProducts(ResultSet resultSet) throws SQLException {
-        ArrayList<Product> products = new ArrayList<>();
-            while( resultSet.next()){
-                SingleProduct product = new SingleProduct();
-                product.setCode(resultSet.getString("CODE"));
-                product.setName(resultSet.getString("NAME"));
-    //            product.setParent(resultSet.getString("PARENT"));
-                product.setPrice((double) resultSet.getFloat("PRICE"));
-                products.add(product);
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement("SELECT * FROM Products where CODE = ?");
+            preparedStatement.setString(1, code);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            Product product = null;
+            while(resultSet.next()){
+                product = resultSetToProduct(resultSet);
             }
+            resultSet.close();
+            this.connection.close();
+            return product;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-        resultSet.close();
-        return products;
+    @Override
+    public int create(String code, String name, double price) {
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO Products (CODE, NAME, PRICE) VALUES (?,?,?)");
+            preparedStatement.setString(1, code);
+            preparedStatement.setString(2, name);
+            preparedStatement.setFloat(3, (float) price);
+            int id = preparedStatement.executeUpdate();
+            this.connection.close();
+            return id;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    @Override
+    public int create(Product product) {
+        try {
+            PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO Products (CODE, NAME, PRICE) VALUES (?,?,?)");
+            preparedStatement.setString(1, product.getCode());
+            preparedStatement.setString(2, product.getName());
+            preparedStatement.setFloat(3, (float) product.getPrice());
+            int id = preparedStatement.executeUpdate();
+            this.connection.close();
+            return id;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    private Product resultSetToProduct(ResultSet resultSet) throws SQLException {
+            SingleProduct product = new SingleProduct();
+            product.setId(resultSet.getInt("ID"));
+            product.setCode(resultSet.getString("CODE"));
+            product.setName(resultSet.getString("NAME"));
+//            product.setParent(resultSet.getString("PARENT"));
+            product.setPrice((double) resultSet.getFloat("PRICE"));
+            return product;
     }
 }
