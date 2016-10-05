@@ -1,3 +1,4 @@
 language: java
 jsk:
  - oraclejdk8
+ script: mvn clean verify
