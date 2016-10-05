@@ -2,7 +2,6 @@ package data;
 
 import app.Product;
 import app.SingleProduct;
-import oracle.jdbc.pool.OracleDataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,9 +22,10 @@ public class JDBCProductRepository implements ProductRepository {
 
     private void setConnection() {
         try {
-            OracleDataSource ds = new OracleDataSource();
-            ds.setURL("jdbc:oracle:thin:@localhost:1521:XE");
-            this.connection = ds.getConnection("erik", "oracle");
+
+
+
+            this.connection = DriverManager.getConnection( "jdbc:oracle:thin:@localhost:1521:XE", "erik", "oracle");
 
             DatabaseMetaData meta = connection.getMetaData();
 
