@@ -12,5 +12,5 @@ public interface TransactionRepository {
     ArrayList<Transaction> getBySession(int sessionId);
     Transaction getById(int transactionId);
     Transaction create(String type);
-    void addProductToTransaction(int transactionId, int productId);
+    void addProductToTransaction(int transactionId, String productCode);
 }

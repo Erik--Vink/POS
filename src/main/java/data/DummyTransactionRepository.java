@@ -5,6 +5,7 @@ import app.Transaction;
 import app.TransactionFactory;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 /**
  * Created by Erik on 22-9-2016.
@@ -41,7 +42,8 @@ public class DummyTransactionRepository implements TransactionRepository {
 
     @Override
     public Transaction getById(int transactionId) {
-        return null;
+        Predicate<Transaction> predicate = p-> p.getId() == transactionId;
+        return transactions.stream().filter(predicate).findFirst().get();
     }
 
     @Override
@@ -54,9 +56,9 @@ public class DummyTransactionRepository implements TransactionRepository {
     }
 
     @Override
-    public void addProductToTransaction(int transactionId, int productId) {
+    public void addProductToTransaction(int transactionId, String productCode) {
         Transaction transaction = getById(transactionId);
-        Product product = productRepository.getById(productId);
+        Product product = productRepository.getByCode(productCode);
         transaction.addProduct(product);
     }
 }

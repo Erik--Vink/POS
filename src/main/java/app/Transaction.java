@@ -18,6 +18,7 @@ public abstract class Transaction {
     public Transaction(){
         this.productsInTransaction = new ArrayList<Product>();
         this.inProgress = true;
+        this.totalAmount = 0;
     }
 
     public void finishTransaction(){
@@ -27,6 +28,7 @@ public abstract class Transaction {
     public void addProduct(Product product){
         if(inProgress){
             this.productsInTransaction.add(product);
+            this.totalAmount += product.getPrice();
         }
     }
 

@@ -4,12 +4,11 @@ import app.Inventory;
 import app.Product;
 import app.SingleProduct;
 import data.DummyProductRepository;
+import data.JDBCProductRepository;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -20,7 +19,9 @@ public class ProductResource {
 
     @GET @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<Product> getAll(){
-        return DummyProductRepository.getInstance().getAll();
+        JDBCProductRepository repository =  new JDBCProductRepository();
+        ArrayList<Product> products = repository.getAll();
+        return products;
     }
 
 
@@ -29,13 +30,13 @@ public class ProductResource {
         return DummyProductRepository.getInstance().getByCode(String.valueOf(code));
     }
 
-
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(SingleProduct product){
-        DummyProductRepository.getInstance().create(product);
-
-        return Response.created(uriInfo.getAbsolutePath()).build();
+        Product createdProduct = DummyProductRepository.getInstance().create(product);
+        UriBuilder builder = UriBuilder.fromUri(uriInfo.getAbsolutePath());
+        builder.path(Integer.toString(createdProduct.getId()));
+        return Response.created(builder.build()).build();
     }
 
 }
