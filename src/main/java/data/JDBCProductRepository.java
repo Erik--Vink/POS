@@ -28,7 +28,6 @@ public class JDBCProductRepository implements ProductRepository {
 
             DatabaseMetaData meta = connection.getMetaData();
 
-            System.out.println(meta.getDriverVersion());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
